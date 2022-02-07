@@ -15,6 +15,7 @@ THIS_SCRIPT="$(greadlink -f "${BASH_SOURCE[0]}" 2>/dev/null || readlink -f "${BA
 . "$(dirname "$THIS_SCRIPT")/../../resources/build/build-utils.sh"
 ## END STANDARD BUILD SCRIPT INCLUDE
 
+. "$KEYMAN_ROOT/resources/shellHelperFunctions.sh"
 . "$KEYMAN_ROOT/resources/build/build-download-resources.sh"
 
 echo Build KMAPro
@@ -36,10 +37,23 @@ display_usage ( ) {
 }
 
 function makeLocalSentryRelease() {
+  cd "$KEYMAN_ROOT/android"
   local SENTRY_RELEASE_VERSION="release-$VERSION_WITH_TAG"
   echo "Making a Sentry release for tag $SENTRY_RELEASE_VERSION"
-  sentry-cli upload-dif -p keyman-android --include-sources
-  sentry-cli releases -p keyman-android files $SENTRY_RELEASE_VERSION upload-sourcemaps ./
+
+  sentry-cli releases -p keyman-android files $SENTRY_RELEASE_VERSION upload ./KMAPro/kMAPro/src/main/java/ || fail "Sentry upload of KMAPro failed."
+  sentry-cli releases -p keyman-android files $SENTRY_RELEASE_VERSION upload ./KMEA/app/src/main/java/ || fail "Sentry upload of KMEA failed."
+  echo "Uploaded source:"
+
+  sentry-cli upload-dif -p keyman-android ./KMAPro/kMAPro/build/intermediates/merged_native_libs/ || fail "Sentry upload-dif failed."
+  #sentry-cli upload-dif -p keyman-android ../KMEA/app/build/intermediates/merged_native_libs/
+  
+  #echo "Uploading sourcemaps"
+  #sentry-cli releases -p keyman-android files $SENTRY_RELEASE_VERSION upload-sourcemaps ./KMEA/app/src/main/assets --rewrite || die "Sentry upload sourcemap failed."
+  #echo "Uploading symbols for Keyman for Android"
+  #sentry-cli releases -p keyman-android files $SENTRY_RELEASE_VERSION upload -x java ./KMAPro/kMAPro/src/ || die "Sentry upload KMAPro failed."
+  #echo "Uploading symbols for Keyman Engine for Android"
+  #sentry-cli releases -p keyman-android files $SENTRY_RELEASE_VERSION upload -x java ./KMEA/app/src/ || die "Sentry upload KMEA failed."
 
   echo "Finalizing release tag $SENTRY_RELEASE_VERSION"
   sentry-cli releases finalize "$SENTRY_RELEASE_VERSION"
@@ -102,6 +116,7 @@ echo "NO_DAEMON: $NO_DAEMON"
 echo "ONLY_DEBUG: $ONLY_DEBUG"
 echo "DO_KEYBOARDS_DOWNLOAD: $DO_KEYBOARDS_DOWNLOAD"
 echo "DO_MODELS_DOWNLOAD: $DO_MODELS_DOWNLOAD"
+echo "UPLOAD_SENTRY: $UPLOAD_SENTRY"
 echo "DO_SENTRY_LOCAL_UPLOAD: $DO_SENTRY_LOCAL_UPLOAD"
 echo
 
@@ -114,7 +129,7 @@ fi
 # Convert markdown to html for offline help
 echo "Converting markdown to html for offline help"
 cd "$KEYMAN_ROOT/android"
-./build-help.sh htm
+#./build-help.sh htm
 cd "$KEYMAN_ROOT/android/KMAPro"
 
 # Download default keyboard and dictionary
@@ -136,6 +151,6 @@ fi
 echo "BUILD_FLAGS $BUILD_FLAGS"
 ./gradlew $DAEMON_FLAG clean $BUILD_FLAGS
 
-if [ "$DO_SENTRY_LOCAL_UPLOAD" = true ]; then
+if [[ "$UPLOAD_SENTRY" = true || "$DO_SENTRY_LOCAL_UPLOAD" = true ]]; then
   makeLocalSentryRelease
 fi

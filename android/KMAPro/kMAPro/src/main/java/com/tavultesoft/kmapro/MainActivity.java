@@ -93,6 +93,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.sentry.Sentry;
 import io.sentry.android.core.SentryAndroid;
 
 public class MainActivity extends BaseActivity implements OnKeyboardEventListener, OnKeyboardDownloadEventListener,
@@ -679,7 +680,11 @@ public class MainActivity extends BaseActivity implements OnKeyboardEventListene
     dialogBuilder.setPositiveButton(getString(R.string.label_ok), new DialogInterface.OnClickListener() {
       @Override
       public void onClick(DialogInterface dialog, int which) {
-        // Done
+        try {
+          throw new NullPointerException("MainActivity throwing null");
+        } catch (NullPointerException e) {
+          KMLog.LogException(TAG, "showTextSizeDialog throwing null", e);
+        }
       }
     });
 
