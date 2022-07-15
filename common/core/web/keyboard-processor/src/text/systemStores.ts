@@ -42,9 +42,6 @@ namespace com.keyman.text {
     }
 
     set(value: string) {
-      // Even if things stay the same, we should still signal this.
-      // It's important for tracking if a rule directly set the layer
-      // versus if it passively remained.
       if(this.handler) {
         if(this.handler(this, value)) {
           return;
@@ -108,7 +105,7 @@ namespace com.keyman.text {
               return false; // web matches anything other than 'native'
             }
             break;
-
+            
           case 'native':
             // This will return true for embedded KeymanWeb
           case 'ie':
@@ -121,7 +118,7 @@ namespace com.keyman.text {
               return false;
             }
             break;
-
+            
           default:
             return false;
         }
