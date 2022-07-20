@@ -289,8 +289,6 @@ int CompileTarget;
 KMX_WCHAR const * DeadKeyChars =
 u"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
 
-/* _S2 */   //#define DebugLog(msg,...) (km::kbp::kmx::ShouldDebug() ? km::kbp::kmx::DebugLog1(__FILE__, __LINE__, __FUNCTION__, (msg),__VA_ARGS__) : 0)
-
 KMX_BOOL WINAPI DllMain(HINSTANCE hinst, KMX_DWORD fdwReason, LPVOID lpvReserved)
 {
   if (fdwReason == DLL_PROCESS_ATTACH) g_hInstance = hinst;
