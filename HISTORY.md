@@ -1,5 +1,37 @@
 # Keyman Version History
 
+## 16.0.36 alpha 2022-07-20
+
+* chore(linux): Code cleanup (#6957)
+* fix(linux): Another attempt at fixing postinst script (#6960)
+* fix(linux): Fix uninstallation when using fcitx5 (#6963)
+
+## 16.0.35 alpha 2022-07-19
+
+* fix(common): Fix `delete` (#6965)
+
+## 16.0.34 alpha 2022-07-15
+
+* fix(developer): set contextDevice in web debugger  ️ (#6906)
+* fix(web): layer-setting ops should not trigger for hardware keystroke processing  ️ (#6902)
+* fix(developer): kmdecomp virtual character key output (#6940)
+* fix(developer): crash on exit when checking for updates (#6941)
+* fix(developer): crash when switching back a tab (#6942)
+* chore(web): remove invalid warning msg (#6950)
+
+## 16.0.33 alpha 2022-07-14
+
+* feat(developer): Option to skip embed of compiler version (#6920)
+* chore(ios): updates core internals for the in-app browser (#6838)
+
+## 16.0.32 alpha 2022-07-13
+
+* fix(ios): ignore CFBundleShortVersionString (#6934)
+
+## 16.0.31 alpha 2022-07-12
+
+* fix(developer): QR Code for Package Editor had wrong path (#6926)
+
 ## 16.0.30 alpha 2022-07-11
 
 * fix(web): maps touch-layout chiral alt, ctrl to non-chiral when non-chiral keyboard is active (#6808)
